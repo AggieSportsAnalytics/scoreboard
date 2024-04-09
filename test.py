@@ -1,10 +1,15 @@
 import http.client
 import json
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv('RAPIDAPI_KEY')
 
 conn = http.client.HTTPSConnection("basketapi1.p.rapidapi.com")
 
 headers = {
-    'X-RapidAPI-Key': "5d6150ae55msh12e07a4c465c2f1p11a559jsn49d4aefb0c59",
+    'X-RapidAPI-Key': api_key,
     'X-RapidAPI-Host': "basketapi1.p.rapidapi.com"
 }
 
