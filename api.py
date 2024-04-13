@@ -21,6 +21,12 @@ def live_matches_data():
     data = json.loads(res.read().decode())
     return data
 
+def player_statistics_data(match_id):
+    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/lineups", headers=headers)
+
+    res = conn.getresponse()
+    data = json.loads(res.read().decode())
+    return data
 
 
 # if len(data['events']) != 0:
