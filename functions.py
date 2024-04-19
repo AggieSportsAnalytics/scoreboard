@@ -3,6 +3,7 @@ from api import player_statistics_data
 
 
 def parse_live_match(event_number):
+    print("parsing match")
     unparsed_data = live_matches_data()
     match = unparsed_data['events'][event_number]
     filtered_data = { 
@@ -19,6 +20,7 @@ def parse_live_match(event_number):
     return filtered_data
 
 def parsed_player_statistics(match_id):
+    print("parsing stats")
     unparsed_data = player_statistics_data(match_id)
     home = unparsed_data['home']['players']
     away = unparsed_data['away']['players']
