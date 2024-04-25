@@ -34,7 +34,7 @@ def parsed_player_statistics(match_id):
     for player in away:
         away_players[player['player']['name']] = player['statistics']
 
-    # shot efficiency metric, printed to terminal
+    # Shot efficiency metric printed to terminal
     efficiency = shot_efficiency(home_players, away_players)
     print("Home Team Shooting Efficiency:", efficiency["home"], "%")
     print("Away Team Shooting Efficiency:", efficiency["away"], "%")
@@ -44,6 +44,7 @@ def parsed_player_statistics(match_id):
         'away': away_players
     }
 
+# Shot Efficiency Metric
 def shot_efficiency(home_players, away_players):
     def get_team_efficiency(players):
         total_field_goals_made = 0
@@ -74,3 +75,5 @@ def shot_efficiency(home_players, away_players):
         "home": home_shooting_efficiency,
         "away": away_shooting_efficiency
     }
+
+# Controversial fun fact metric
