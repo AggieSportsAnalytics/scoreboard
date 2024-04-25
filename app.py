@@ -17,6 +17,7 @@ placeholder_away_player_statistics = st.empty()
 
 for seconds in range(30): # max one minute so that it doesn't accidentally run in the background
     match = parse_live_match(0)
+    print("bomboclaat")
     match_id = match.pop('id') # pop the id from match so it is not displayed
     home_team = match.pop('home')
     away_team = match.pop('away')
