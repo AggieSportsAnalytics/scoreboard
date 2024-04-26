@@ -6,11 +6,13 @@ import time
 
 
 match = parse_live_match(0) # get the match initially to write the team names
-st.title(match['home'] + ' vs. ' + match['away'])
+homeTeam = match['home']
+awayTeam = match['away']
+st.title(homeTeam + ' vs. ' + awayTeam)
 placeholder = st.empty() # create a placeholder to keep track of the live data
-st.title(match['home'])
+st.title(homeTeam)
 placeholder_home_player_statistics = st.empty()
-st.title(match['away'])
+st.title(awayTeam)
 placeholder_away_player_statistics = st.empty()
 
 for seconds in range(30): # max one minute so that it doesn't accidentally run in the background
