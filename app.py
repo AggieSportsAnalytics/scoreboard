@@ -1,11 +1,30 @@
-import app as st
+import streamlit as st
+from functions import parse_live_match
+from functions import parsed_player_statistics
+import pandas as pd
+import time
 
-st.title('Hello Streamlit!')
 
-name = st.text_input("Enter your name", "")
+match = parse_live_match(0) # get the match initially to write the team names
+homeTeam = match['home']
+awayTeam = match['away']
+st.title(homeTeam + ' vs. ' + awayTeam)
+placeholder = st.empty() # create a placeholder to keep track of the live data
+st.title(homeTeam)
+placeholder_home_player_statistics = st.empty()
+st.title(awayTeam)
+placeholder_away_player_statistics = st.empty()
 
-if st.button('Greet'):
-    st.write(f'Hello {name}, welcome to Streamlit!')
+for seconds in range(30): # max one minute so that it doesn't accidentally run in the background
+    match = parse_live_match(0)
+    match_id = match.pop('id') # pop the id from match so it is not displayed
+    home_team = match.pop('home')
+    away_team = match.pop('away')
+    placeholder.table(match)
 
-# To run the app, save this script as app.py and use the following command:
-# streamlit run app.py
+    player_statistics = parsed_player_statistics(match_id)
+
+    placeholder_home_player_statistics.table(pd.DataFrame(player_statistics['home']).T) # pandas and .T is to transpose the data 
+    placeholder_away_player_statistics.table(pd.DataFrame(player_statistics['away']).T)
+
+    time.sleep(2) # update data every two

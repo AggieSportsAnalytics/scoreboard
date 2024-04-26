@@ -13,25 +13,34 @@ headers = {
     'X-RapidAPI-Host': "basketapi1.p.rapidapi.com"
 }
 
-conn.request("GET", "/api/basketball/matches/live", headers=headers)
+def live_matches_data():
+    conn.request("GET", "/api/basketball/matches/live", headers=headers)
 
-res = conn.getresponse()
-data = json.loads(res.read().decode())
+    res = conn.getresponse()
+    data = json.loads(res.read().decode())
+    return data
 
-if len(data['events']) != 0:
-    first_game = data['events'][0]
+def player_statistics_data(match_id):
+    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/lineups", headers=headers)
+
+    res = conn.getresponse()
+    data = json.loads(res.read().decode())
+    return data
 
 
-    home_team = first_game['homeTeam']['name']
-    home_score = first_game['homeScore']['current']
-    away_team = first_game['awayTeam']['name']
-    away_score = first_game['awayScore']['current']
+# if len(data['events']) != 0:
+#     first_game = data['events'][0]
 
-    print("Home Team:", home_team)
-    print("Home Score:", home_score)
-    print("Away Team:", away_team)
-    print("Away Score:", away_score)
-else:
-    print("No Games Currently")
-print(data)
+#     home_team = first_game['homeTeam']['name']
+#     home_score = first_game['homeScore']['current']
+#     away_team = first_game['awayTeam']['name']
+#     away_score = first_game['awayScore']['current']
+
+#     print("Home Team:", home_team)
+#     print("Home Score:", home_score)
+#     print("Away Team:", away_team)
+#     print("Away Score:", away_score)
+# else:
+#     print("No Games Currently")
+# print(data)
 
