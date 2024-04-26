@@ -13,7 +13,6 @@ headers = {
     'X-RapidAPI-Host': "basketapi1.p.rapidapi.com"
 }
 
-
 def live_matches_data():
     conn.request("GET", "/api/basketball/matches/live", headers=headers)
 
