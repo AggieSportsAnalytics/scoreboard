@@ -1,4 +1,4 @@
-import streamlit as st
+import app as st
 
 st.title('Hello Streamlit!')
 
