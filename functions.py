@@ -1,6 +1,12 @@
 from api import live_matches_data
 from api import player_statistics_data
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=openai_api_key)
 
 def parse_live_match(event_number):
     print("parsing match")
@@ -76,4 +82,16 @@ def shot_efficiency(home_players, away_players):
         "away": away_shooting_efficiency
     }
 
-# Controversial fun fact metric
+# Controversial fun fact metric with a very cool, basketball-tuned AI agent
+# Only needs to be called once per game, otherwise it will be expensive
+def controversional_fact(home_team, away_team):
+    call = client.chat.completions.create(
+        model="gpt-4",
+        messages=[
+        {"role": "system", "content": "You are a helpful assistant who knows a lot about Basketball."},
+        {"role": "user", "content": f"Give me a controversial fun fact about either the {home_team} or {away_team}. Keep it around 50 words long, and phrase it as a 'fun fact about the team'. Make it edgy and funny, and make it a recent fact."},
+        ]
+    )
+    fact_response = call.choices[0].message.content
+    return fact_response
+
