@@ -1,5 +1,6 @@
 from api import live_matches_data
 from api import player_statistics_data
+from api import shot_map_data
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
@@ -14,6 +15,8 @@ def parse_live_match(event_number):
     match = unparsed_data['events'][event_number]
     filtered_data = { 
                         'id': unparsed_data['events'][event_number]['id'],
+                        'home_team_id': match['homeTeam']['id'],
+                        'away_team_id': match['awayTeam']['id'],
                         'home': match['homeTeam']['name'],
                         'away': match['awayTeam']['name'],
                         (match['homeTeam']['name']): { 
@@ -190,3 +193,30 @@ def controversional_fact(home_team, away_team):
     )
     fact_response = call.choices[0].message.content
     return fact_response
+
+
+# Shot Map
+def shot_map(match_id, team_id):
+    unparsed_data = shot_map_data(match_id, team_id)
+    x_made = []
+    y_made = []
+    x_missed = []
+    y_missed = []
+    for x in unparsed_data['shotmap']:
+        if x['made'] == True:
+            x_made.append(x['x'])
+            y_made.append(x['y'])
+        else:
+            x_missed.append(x['x'])
+            y_missed.append(x['y'])
+
+    return { 
+        'made': {
+            'x': x_made,
+            'y': y_made
+        },
+        'missed': {
+            'x': x_missed,
+            'y': y_missed
+        }
+    }
