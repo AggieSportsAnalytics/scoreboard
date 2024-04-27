@@ -2,6 +2,7 @@ import streamlit as st
 from functions import parse_live_match
 from functions import parsed_player_statistics
 from functions import shot_map
+from functions import match_odds
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
@@ -35,6 +36,7 @@ for seconds in range(30): # max one minute so that it doesn't accidentally run i
     placeholder.table(match)
 
     player_statistics = parsed_player_statistics(match_id)
+    match_odds_data = match_odds(match_id)
 
     placeholder_home_player_statistics.table(pd.DataFrame(player_statistics['home']).T) # pandas and .T is to transpose the data 
     placeholder_away_player_statistics.table(pd.DataFrame(player_statistics['away']).T)

@@ -1,6 +1,8 @@
 from api import live_matches_data
 from api import player_statistics_data
 from api import shot_map_data
+from api import match_odds_data
+from fractions import Fraction
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
@@ -219,4 +221,20 @@ def shot_map(match_id, team_id):
             'x': x_missed,
             'y': y_missed
         }
+    }
+
+def match_odds(match_id):
+    unparsed_data = match_odds_data(match_id)
+    home_team_win_percentage = 1/(float(Fraction(unparsed_data['markets'][0]['choices'][0]['fractionalValue'])) + 1)
+    away_team_win_percentage = 1/(float(Fraction(unparsed_data['markets'][0]['choices'][1]['fractionalValue'])) + 1)
+    # odds themselves are a bit skewed to favor the house, meaning the win percentages dont add up to 100%
+    gap = 1 - (home_team_win_percentage + away_team_win_percentage)
+    home_team_win_percentage += gap/2
+    away_team_win_percentage += gap/2
+    print("Home Team Win Percentage:", home_team_win_percentage, "%")
+    print("Away Team Win Percentage:", away_team_win_percentage, "%")
+    # now they should add up to 100%
+    return { # convert home_team to a number value
+        'home_team': home_team_win_percentage,
+        'away_team': away_team_win_percentage
     }
