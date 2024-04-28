@@ -231,8 +231,8 @@ def match_odds(match_id):
     gap = 1 - (home_team_win_percentage + away_team_win_percentage)
     home_team_win_percentage += gap/2
     away_team_win_percentage += gap/2
-    print("Home Team Win Percentage:", home_team_win_percentage, "%")
-    print("Away Team Win Percentage:", away_team_win_percentage, "%")
+    print("Home Team Win Percentage:", home_team_win_percentage*100, "%")
+    print("Away Team Win Percentage:", away_team_win_percentage*100, "%")
     # now they should add up to 100%
     return { # convert home_team to a number value
         'home_team': home_team_win_percentage,
