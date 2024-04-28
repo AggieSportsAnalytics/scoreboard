@@ -27,6 +27,19 @@ def player_statistics_data(match_id):
     data = json.loads(res.read().decode())
     return data
 
+def shot_map_data(match_id, teamid):
+    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/team/" + str(teamid) + "/shotmap", headers=headers)
+
+    res = conn.getresponse()
+    data = json.loads(res.read().decode())
+    return data
+
+def match_odds_data(match_id):
+    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/odds", headers=headers)
+
+    res = conn.getresponse()
+    data = json.loads(res.read().decode())
+    return data
 
 # if len(data['events']) != 0:
 #     first_game = data['events'][0]
