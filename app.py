@@ -1,8 +1,13 @@
 import streamlit as st
 from functions import parse_live_match
 from functions import parsed_player_statistics
-from functions import shot_map
-from functions import match_odds
+from functions import draymond 
+from functions import shot_efficiency 
+from functions import controversial_fact
+from functions import bum 
+from functions import hot_hands 
+from functions import shot_map 
+from functions import match_odds 
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
@@ -18,6 +23,11 @@ placeholder_home_player_statistics = st.empty()
 st.title(awayTeam)
 placeholder_away_player_statistics = st.empty()
 
+# FACT (openai is expensive lol and its kinda slow rn)
+#initial_match_id = match.pop('id')
+#fact = controversial_fact(initial_match_id)
+#print("Fact: ", fact)
+
 placeholder_shot_map = st.empty()
 court_img = plt.imread('./images/shot_chart.webp')
 fig, ax = plt.subplots()
@@ -32,6 +42,17 @@ for seconds in range(30): # max one minute so that it doesn't accidentally run i
     home_team = match.pop('home')
     away_team = match.pop('away')
 
+    # print out the stats except for fact + map
+    bum_stat = bum(match_id)
+    hot_hands_stat = hot_hands(match_id)
+    draymond_stat = draymond(match_id)
+    match_odds_stat = match_odds(match_id)
+    shot_efficiency_stat = shot_efficiency(match_id)
+    print("bum: ", bum_stat)
+    print("hot hands: ", hot_hands_stat)
+    print("draymond: ", draymond_stat)
+    print("match odds: ", match_odds_stat)
+    print("shot efficiency: ", shot_efficiency_stat)
 
     placeholder.table(match)
 
