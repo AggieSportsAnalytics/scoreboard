@@ -45,11 +45,6 @@ def parsed_player_statistics(match_id):
     for player in away:
         away_players[player['player']['name']] = player['statistics']
 
-    # Shot efficiency metric printed to terminal
-    efficiency = shot_efficiency(home_players, away_players)
-    print("Home Team Shooting Efficiency:", efficiency["home"], "%")
-    print("Away Team Shooting Efficiency:", efficiency["away"], "%")
-
     return {
         'home': home_players,
         'away': away_players
@@ -149,30 +144,22 @@ def draymond(match_id):
     max_fouls_away = max(away_stats, key=lambda x: away_stats[x]['Personal Fouls'])
     return max_fouls_home, max_fouls_away
 
-  
- 
 # Shot Efficiency Metric
-def shot_efficiency(home_players, away_players):
-    def get_team_efficiency(players):
-        total_field_goals_made = 0
-        total_field_goal_attempts = 0
-        total_free_throws_made = 0
-        total_free_throw_attempts = 0
+def shot_efficiency(match_id):
+    unparsed_data = player_statistics_data(match_id)
+    home_players = unparsed_data['home']['players']
+    away_players = unparsed_data['away']['players']
 
-        for player_stats in players.values():
-            total_field_goals_made += player_stats['fieldGoalsMade']
-            total_field_goal_attempts += player_stats['fieldGoalAttempts']
-            total_free_throws_made += player_stats['freeThrowsMade']
-            total_free_throw_attempts += player_stats['freeThrowAttempts']
+    def get_team_efficiency(players):
+        total_field_goals_made = sum(p['statistics']['fieldGoalsMade'] for p in players)
+        total_field_goal_attempts = sum(p['statistics']['fieldGoalAttempts'] for p in players)
+        total_free_throws_made = sum(p['statistics']['freeThrowsMade'] for p in players)
+        total_free_throw_attempts = sum(p['statistics']['freeThrowAttempts'] for p in players)
 
         total_shots_made = total_field_goals_made + total_free_throws_made
         total_shots_attempted = total_field_goal_attempts + total_free_throw_attempts
 
-        if total_shots_attempted > 0:
-            shooting_efficiency = (total_shots_made / total_shots_attempted) * 100
-        else:
-            shooting_efficiency = 0
-
+        shooting_efficiency = (total_shots_made / total_shots_attempted) * 100 if total_shots_attempted > 0 else 0
         return shooting_efficiency
 
     home_shooting_efficiency = get_team_efficiency(home_players)
@@ -185,16 +172,21 @@ def shot_efficiency(home_players, away_players):
 
 # Controversial fun fact metric with a very cool, basketball-tuned AI agent
 # Only needs to be called once per game, otherwise it will be expensive
-def controversional_fact(home_team, away_team):
-    call = client.chat.completions.create(
+def controversial_fact(match_id):
+    match_data = live_matches_data()
+    match = next(event for event in match_data['events'] if event['id'] == match_id)
+    home_team = match['homeTeam']['name']
+    away_team = match['awayTeam']['name']
+
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[
-        {"role": "system", "content": "You are a helpful assistant who knows a lot about Basketball."},
-        {"role": "user", "content": f"Give me a controversial fun fact about either the {home_team} or {away_team}. Keep it around 50 words long, and phrase it as a 'fun fact about the team'. Make it edgy and funny, and make it a recent fact."},
+            {"role": "system", "content": "You are a helpful assistant who knows a lot about basketball."},
+            {"role": "user", "content": f"Give me a controversial fun fact about either the {home_team} or {away_team}. Make it around 50 words long, edgy and funny, and from recent events."},
         ]
     )
-    fact_response = call.choices[0].message.content
-    return fact_response
+
+    return response.choices[0].message.content
 
 
 # Shot Map
@@ -231,10 +223,10 @@ def match_odds(match_id):
     gap = 1 - (home_team_win_percentage + away_team_win_percentage)
     home_team_win_percentage += gap/2
     away_team_win_percentage += gap/2
-    print("Home Team Win Percentage:", home_team_win_percentage, "%")
-    print("Away Team Win Percentage:", away_team_win_percentage, "%")
+    #print("Home Team Win Percentage:", home_team_win_percentage*100, "%")
+    #print("Away Team Win Percentage:", away_team_win_percentage*100, "%")
     # now they should add up to 100%
     return { # convert home_team to a number value
-        'home_team': home_team_win_percentage,
-        'away_team': away_team_win_percentage
+        'home_team': home_team_win_percentage*100,
+        'away_team': away_team_win_percentage*100
     }
