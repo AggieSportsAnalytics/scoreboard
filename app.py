@@ -12,15 +12,36 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
+def display_shot_map(match_id, home_team_id, away_team_id, placeholder, fig, ax):
+    shot_map_home = shot_map(match_id, home_team_id)
+    shot_map_away = shot_map(match_id, away_team_id)
 
-match = parse_live_match(0) # get the match initially to write the team names
-homeTeam = match['home']
-awayTeam = match['away']
-st.title(homeTeam + ' vs. ' + awayTeam)
-placeholder = st.empty() # create a placeholder to keep track of the live data 
-st.title(homeTeam)
+    ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'], color='black', marker='x', label='Made Shot', alpha=0.5)
+    ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
+
+    fig.suptitle(home_team + ' Shot Map')
+
+    ax.scatter(shot_map_away['made']['x'], shot_map_away['made']['y'], color='black', marker='x', label='Made Shot', alpha=0.5)
+    ax.scatter(shot_map_away['missed']['x'], shot_map_away['missed']['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
+
+    fig.suptitle(away_team + ' Shot Map')
+    return fig
+
+def display_player_statistics(match_id, home_placeholder, away_placeholder):
+    player_statistics = parsed_player_statistics(match_id)
+
+    return [ pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T ]
+
+
+
+# match = parse_live_match(0) # get the match initially to write the team names
+# homeTeam = match['home']
+# awayTeam = match['away']
+# st.title(homeTeam + ' vs. ' + awayTeam)
+# placeholder = st.empty() # create a placeholder to keep track of the live data 
+# st.title(homeTeam)
 placeholder_home_player_statistics = st.empty()
-st.title(awayTeam)
+# st.title(awayTeam)
 placeholder_away_player_statistics = st.empty()
 
 # FACT (openai is expensive lol and its kinda slow rn)
@@ -34,6 +55,8 @@ fig, ax = plt.subplots()
 ax.imshow(court_img, extent=[-250, 250, -47.5, 422.5])
 ax.axis('off')
 
+switch = -1
+next = 0
 for seconds in range(30): # max one minute so that it doesn't accidentally run in the background
     match = parse_live_match(0)
     match_id = match.pop('id') # pop the id from match so it is not displayed
@@ -43,32 +66,43 @@ for seconds in range(30): # max one minute so that it doesn't accidentally run i
     away_team = match.pop('away')
 
     # print out the stats except for fact + map
-    bum_stat = bum(match_id)
-    hot_hands_stat = hot_hands(match_id)
-    draymond_stat = draymond(match_id)
-    match_odds_stat = match_odds(match_id)
-    shot_efficiency_stat = shot_efficiency(match_id)
-    print("bum: ", bum_stat)
-    print("hot hands: ", hot_hands_stat)
-    print("draymond: ", draymond_stat)
-    print("match odds: ", match_odds_stat)
-    print("shot efficiency: ", shot_efficiency_stat)
+    # bum_stat = bum(match_id)
+    # hot_hands_stat = hot_hands(match_id)
+    # draymond_stat = draymond(match_id)
+    # match_odds_stat = match_odds(match_id)
+    # shot_efficiency_stat = shot_efficiency(match_id)
+    # print("bum: ", bum_stat)
+    # print("hot hands: ", hot_hands_stat)
+    # print("draymond: ", draymond_stat)
+    # print("match odds: ", match_odds_stat)
+    # print("shot efficiency: ", shot_efficiency_stat)
 
-    placeholder.table(match)
+    # placeholder.table(match)
+    # match_odds_data = match_odds(match_id)
 
-    player_statistics = parsed_player_statistics(match_id)
-    match_odds_data = match_odds(match_id)
+    # Next is declared after the placeholder is updated otherwise there is a large pause between stats
+    # due to the api calling time, so im calling it afterwards instead
 
-    placeholder_home_player_statistics.table(pd.DataFrame(player_statistics['home']).T) # pandas and .T is to transpose the data 
-    placeholder_away_player_statistics.table(pd.DataFrame(player_statistics['away']).T)
+    # TODO: Create more "display" functions for the other stats
 
-    shot_map_home = shot_map(match_id, home_team_id)
-    shot_map_away = shot_map(match_id, away_team_id)
-
-    ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'], color='black', marker='x', label='Made Shot', alpha=0.5)
-    ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
-
-    fig.suptitle(home_team + ' Shot Map')
-    placeholder_shot_map.pyplot(fig)
-
-    time.sleep(2) # update data every two
+    placeholder_away_player_statistics.empty()
+    placeholder_home_player_statistics.empty()
+    placeholder_shot_map.empty()
+    if switch == -1: # next needs to be initialized to a base value
+        next = display_player_statistics(match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
+        switch = 0
+    elif switch == 0:
+        switch+= 1
+        placeholder_home_player_statistics.table(next[0])
+        placeholder_away_player_statistics.table(next[1])
+        next = display_shot_map(match_id, home_team_id, away_team_id, placeholder_shot_map, fig, ax)
+        # placeholder_away_player_statistics.title("1")
+        time.sleep(5)
+    elif switch == 1:
+        switch += 1
+        placeholder_shot_map.pyplot(next)
+        next = display_player_statistics(match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
+        # placeholder_shot_map.title("2")
+        time.sleep(5)
+    elif switch == 2:
+        switch = 0
