@@ -1,53 +1,70 @@
 import streamlit as st
 from functions import parse_live_match
 from functions import parsed_player_statistics
-from functions import draymond 
-from functions import shot_efficiency 
+from functions import draymond
+from functions import shot_efficiency
 from functions import controversial_fact
-from functions import bum 
-from functions import hot_hands 
-from functions import shot_map 
-from functions import match_odds 
+from functions import bum
+from functions import hot_hands
+from functions import shot_map
+from functions import match_odds
 import matplotlib.pyplot as plt
 import pandas as pd
 import time
+
+st.set_page_config(layout="wide")
+
 
 def display_shot_map(match_id, home_team_id, away_team_id, placeholder, fig, ax):
     shot_map_home = shot_map(match_id, home_team_id)
     shot_map_away = shot_map(match_id, away_team_id)
 
-    ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'], color='black', marker='x', label='Made Shot', alpha=0.5)
-    ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
+    ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'],
+               color='black', marker='x', label='Made Shot', alpha=0.5)
+    ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']
+               ['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
 
     fig.suptitle(home_team + ' Shot Map')
 
-    ax.scatter(shot_map_away['made']['x'], shot_map_away['made']['y'], color='black', marker='x', label='Made Shot', alpha=0.5)
-    ax.scatter(shot_map_away['missed']['x'], shot_map_away['missed']['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
+    ax.scatter(shot_map_away['made']['x'], shot_map_away['made']['y'],
+               color='black', marker='x', label='Made Shot', alpha=0.5)
+    ax.scatter(shot_map_away['missed']['x'], shot_map_away['missed']
+               ['y'], color='green', marker='o', label='Missed Shot', alpha=0.5)
 
     fig.suptitle(away_team + ' Shot Map')
     return fig
 
+
 def display_player_statistics(match_id, home_placeholder, away_placeholder):
     player_statistics = parsed_player_statistics(match_id)
 
-    return [ pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T ]
+    return [pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T]
 
+
+def display_draymond(match_id):
+    dray = draymond(match_id)
+    return dray
+
+
+def display_controversial_fact(match_id):
+    fact = controversial_fact(match_id)
+    return fact
 
 
 # match = parse_live_match(0) # get the match initially to write the team names
 # homeTeam = match['home']
 # awayTeam = match['away']
 # st.title(homeTeam + ' vs. ' + awayTeam)
-# placeholder = st.empty() # create a placeholder to keep track of the live data 
+# placeholder = st.empty() # create a placeholder to keep track of the live data
 # st.title(homeTeam)
 placeholder_home_player_statistics = st.empty()
 # st.title(awayTeam)
 placeholder_away_player_statistics = st.empty()
 
 # FACT (openai is expensive lol and its kinda slow rn)
-#initial_match_id = match.pop('id')
-#fact = controversial_fact(initial_match_id)
-#print("Fact: ", fact)
+# initial_match_id = match.pop('id')
+# fact = controversial_fact(initial_match_id)
+# print("Fact: ", fact)
 
 placeholder_shot_map = st.empty()
 court_img = plt.imread('./images/shot_chart.webp')
@@ -57,9 +74,38 @@ ax.axis('off')
 
 switch = -1
 next = 0
-for seconds in range(30): # max one minute so that it doesn't accidentally run in the background
+
+
+def display_shot_efficiency(match_id):
+    eff = shot_efficiency(match_id)
+    return eff
+
+
+def display_hot_hands(match_id):
+    hot = hot_hands(match_id)
+    return hot
+
+
+def display_bum(match_id):
+    bum_stat = bum(match_id)
+    return bum_stat
+
+
+def display_match_odds(match_id):
+    match_odds = match_odds(match_id)
+    return match_odds
+
+
+placeholder_draymond = st.empty()
+placeholder_hot_hands = st.empty()
+placeholder_bum = st.empty()
+placeholder_shot_efficiency = st.empty()
+placeholder_match_odds = st.empty()
+stat_title = st.empty()
+# max one minute so that it doesn't accidentally run in the background
+for seconds in range(30):
     match = parse_live_match(0)
-    match_id = match.pop('id') # pop the id from match so it is not displayed
+    match_id = match.pop('id')  # pop the id from match so it is not displayed
     home_team_id = match.pop('home_team_id')
     away_team_id = match.pop('away_team_id')
     home_team = match.pop('home')
@@ -88,21 +134,73 @@ for seconds in range(30): # max one minute so that it doesn't accidentally run i
     placeholder_away_player_statistics.empty()
     placeholder_home_player_statistics.empty()
     placeholder_shot_map.empty()
-    if switch == -1: # next needs to be initialized to a base value
-        next = display_player_statistics(match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
+    placeholder_draymond.empty()
+    placeholder_shot_efficiency.empty()
+    placeholder_hot_hands.empty()
+    placeholder_bum.empty()
+    placeholder_match_odds.empty()
+    stat_title.empty()
+    if switch == -1:  # next needs to be initialized to a base value
+        next = display_player_statistics(
+            match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
         switch = 0
     elif switch == 0:
-        switch+= 1
+        switch += 1
+        # general
+        stat_title.title("general")
         placeholder_home_player_statistics.table(next[0])
         placeholder_away_player_statistics.table(next[1])
-        next = display_shot_map(match_id, home_team_id, away_team_id, placeholder_shot_map, fig, ax)
+        next = display_shot_map(match_id, home_team_id,
+                                away_team_id, placeholder_shot_map, fig, ax)
         # placeholder_away_player_statistics.title("1")
-        time.sleep(5)
+        time.sleep(2)
     elif switch == 1:
         switch += 1
+        # shotmap
+        stat_title.title("shotmap")
         placeholder_shot_map.pyplot(next)
-        next = display_player_statistics(match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
+        next = display_draymond(
+            match_id)
         # placeholder_shot_map.title("2")
-        time.sleep(5)
+        time.sleep(2)
     elif switch == 2:
-        switch = 0
+        switch += 1
+        # draymond
+        stat_title.title("draymond")
+        placeholder_draymond.title(next)
+        next = display_hot_hands(
+            match_id)
+        time.sleep(2)
+    elif switch == 3:
+        switch += 1
+        # hot hands
+        stat_title.title("hot hands")
+        placeholder_hot_hands.title(next)
+        next = display_bum(
+            match_id)
+        time.sleep(2)
+    elif switch == 4:
+        switch += 1
+        # bum
+        stat_title.title("bum")
+        placeholder_bum.title(next)
+        next = display_shot_efficiency(
+            match_id)
+        time.sleep(2)
+    elif switch == 4:
+        switch += 1
+        # shot efficiency
+        stat_title.title("shot efficiency")
+        placeholder_shot_efficiency.title(next)
+        next = display_match_odds(
+            match_id)
+        time.sleep(2)
+    elif switch == 5:
+        switch += 1
+        # match odds
+        stat_title.title("match odds")
+        placeholder_match_odds.title(next)
+        next = 1
+        time.sleep(2)
+    elif switch == 6:
+        switch = -1
