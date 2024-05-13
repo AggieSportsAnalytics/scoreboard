@@ -46,7 +46,7 @@ def display_draymond(match_id):
     return dray
 
 
-def display_controversial_fact(match_id):
+def generate_fact(match_id):
     fact = controversial_fact(match_id)
     return fact
 
@@ -93,12 +93,19 @@ placeholder_hot_hands = st.empty()
 placeholder_bum = st.empty()
 placeholder_shot_efficiency = st.empty()
 placeholder_match_odds = st.empty()
+placeholder_fact = st.empty()
 
 placeholder_shot_map = st.empty()
 court_img = plt.imread('./images/shot_chart.webp')
 fig, ax = plt.subplots()
 ax.imshow(court_img, extent=[-250, 250, -47.5, 422.5])
 ax.axis('off')
+
+fact_match = parse_live_match(0)
+fact_match_id = fact_match.pop('id')
+fact = generate_fact(fact_match_id)
+print("fact generated")
+print(fact)
 
 switch = -1
 next = 0
@@ -140,6 +147,7 @@ for seconds in range(30):
     placeholder_shot_efficiency.empty()
     placeholder_hot_hands.empty()
     placeholder_bum.empty()
+    placeholder_fact.empty()
     placeholder_match_odds.empty()
     if switch == -1:  # next needs to be initialized to a base value
         next = display_player_statistics(
@@ -201,7 +209,14 @@ for seconds in range(30):
         # match odds
         stat_title.title("Match Odds")
         placeholder_match_odds.title(next)
-        next = 1
+        next = fact
         time.sleep(2)
     elif switch == 6:
+        switch += 1
+        # match odds
+        stat_title.title("Fun Fact")
+        placeholder_fact.title(next)
+        next = 1
+        time.sleep(2)
+    elif switch == 7:
         switch = -1
