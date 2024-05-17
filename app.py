@@ -13,7 +13,8 @@ import pandas as pd
 import time
 import logging
 
-st.set_page_config(layout="wide")
+# layout="wide"
+st.set_page_config()
 
 
 def display_shot_map(match_id, home_team_id, away_team_id, placeholder, fig, ax):
@@ -39,15 +40,14 @@ def display_shot_map(match_id, home_team_id, away_team_id, placeholder, fig, ax)
     return fig
 
 
-def display_player_statistics(match_id, home_placeholder, away_placeholder):
+def display_player_statistics(match_id):
     player_statistics = parsed_player_statistics(match_id)
-
     return [pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T]
 
 
 def display_draymond(match_id):
     dray = draymond(match_id)
-    return {homeTeamName: dray[0], awayTeamName: dray[1]}
+    return f"{homeTeamName}: {dray[0]} | {awayTeamName}: {dray[1]}"
 
 
 def generate_fact(match_id):
@@ -55,24 +55,29 @@ def generate_fact(match_id):
     return fact
 
 
+nl = '\n'
+
+# works
+
+
 def display_shot_efficiency(match_id):
     eff = shot_efficiency(match_id)
-    return {homeTeamName: eff[0], awayTeamName: eff[1]}
+    return f"{homeTeamName}: {str(round(eff[0], 2))}% | {awayTeamName}: {str(round(eff[1], 2))}%"
 
 
 def display_hot_hands(match_id):
     hot = hot_hands(match_id)
-    return {homeTeamName: hot[0], awayTeamName: hot[1]}
+    return f"{homeTeamName}: {hot[0]} | {awayTeamName}: {hot[1]}"
 
 
 def display_bum(match_id):
     bum_stat = bum(match_id)
-    return {homeTeamName: bum_stat[0], awayTeamName: bum_stat[1]}
+    return f"{homeTeamName}: {bum_stat[0]} | {awayTeamName}: {bum_stat[1]}"
 
 
 def display_match_odds(match_id):
     mo = match_odds(match_id)
-    return {homeTeamName: mo[0], awayTeamName: mo[1]}
+    return f"{homeTeamName}: {str(round(mo[0], 2))}% | {awayTeamName}: {str(round(mo[1], 2))}%"
 
 
 stat_title = st.empty()
@@ -126,7 +131,7 @@ for seconds in range(30):
     placeholder_match_odds.empty()
     if switch == -1:  # next needs to be initialized to a base value
         next = display_player_statistics(
-            match_id, placeholder_home_player_statistics, placeholder_away_player_statistics)
+            match_id)
         switch = 0
     elif switch == 0:
         switch += 1
@@ -152,6 +157,7 @@ for seconds in range(30):
         # draymond
         stat_title.title("Draymond/Foul")
         placeholder_draymond.title(next)
+        st.image('./images/peter.png')
         next = display_hot_hands(
             match_id)
         time.sleep(2)
@@ -174,7 +180,7 @@ for seconds in range(30):
     elif switch == 5:
         switch += 1
         # shot efficiency
-        stat_title.title("Team Shot Efficiency")
+        stat_title.title("Shot Efficiency")
         placeholder_shot_efficiency.title(next)
         next = display_match_odds(
             match_id)
@@ -188,7 +194,7 @@ for seconds in range(30):
         time.sleep(2)
     elif switch == 7:
         switch += 1
-        # match odds
+        # fun fact
         stat_title.title("Fun Fact")
         placeholder_fact.title(next)
         next = 1
