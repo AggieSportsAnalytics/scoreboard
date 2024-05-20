@@ -6,7 +6,7 @@ import time
 import logging
 from api import live_matches_data
 
-# Set layout to wide
+# layout="wide"
 st.set_page_config(layout="wide")
 
 
@@ -109,14 +109,14 @@ def run_app(event_number):
     fact = generate_fact(fact_match_id)
 
     image_map = {
-        -1: "./images/text.png",
-        0: "./images/text.png",
-        1: "./images/text.png",
-        2: "./images/text.png",
-        3: "./images/text.png",
-        4: "./images/text.png",
-        5: "./images/text.png",
-        6: "./images/text.png"
+        -1: "./images/shotmap.png",
+        0: "./images/shotmap.png",
+        1: "./images/foul.png",
+        2: "./images/hot_hands.png",
+        3: "./images/bum.png",
+        4: "./images/shot_efficiency.png",
+        5: "./images/match_odds.png",
+        6: "./images/fun_fact.png"
     }
 
     for seconds in range(30):
@@ -148,43 +148,53 @@ def run_app(event_number):
                 match_id, home_team_id, away_team_id, fig, ax)
             switch = 0
         elif switch == 0:  # Player Shotmap
-            stat_title.image(image_map[switch])
+            stat_title.image(image_map[switch], width=500)
             placeholder_shot_map.pyplot(next)
             next = display_draymond(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 1:  # Draymond/Foul
             stat_title.image(image_map[switch])
-            placeholder_draymond.title(next[0])
-            placeholder_draymond_2.title(next[1])
+            placeholder_draymond.markdown(
+                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+            placeholder_draymond_2.markdown(
+                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_hot_hands(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 2:  # Hot Hands
             stat_title.image(image_map[switch])
-            placeholder_hot_hands.title(next[0])
-            placeholder_hot_hands_2.title(next[1])
+            placeholder_hot_hands.markdown(
+                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+            placeholder_hot_hands_2.markdown(
+                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_bum(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 3:  # Bum
             stat_title.image(image_map[switch])
-            placeholder_bum.title(next[0])
-            placeholder_bum_2.title(next[1])
+            placeholder_bum.markdown(
+                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+            placeholder_bum_2.markdown(
+                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_shot_efficiency(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 4:  # Shot Efficiency
             stat_title.image(image_map[switch])
-            placeholder_shot_efficiency.title(next[0])
-            placeholder_shot_efficiency_2.title(next[1])
+            placeholder_shot_efficiency.markdown(
+                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+            placeholder_shot_efficiency_2.markdown(
+                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_match_odds(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 5:  # Match Odds
             stat_title.image(image_map[switch])
-            placeholder_match_odds.title(next[0])
-            placeholder_match_odds_2.title(next[1])
+            placeholder_match_odds.markdown(
+                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+            placeholder_match_odds_2.markdown(
+                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = fact
             time.sleep(2)
             switch += 1
