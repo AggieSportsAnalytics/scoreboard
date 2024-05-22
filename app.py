@@ -24,20 +24,20 @@ def display_shot_map(match_id, home_team_id, away_team_id, fig, ax):
         shot_map_away = shot_map(match_id, away_team_id)
 
         ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'],
-                   color='black', marker='x', label='Made Shot', alpha=0.5)
+                    color='black', marker='x', label='Made Shot', alpha=0.5)
         ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']['y'],
-                   color='green', marker='o', label='Missed Shot', alpha=0.5)
+                    color='green', marker='o', label='Missed Shot', alpha=0.5)
 
         fig.suptitle(home_team + ' Shot Map')
 
         ax.scatter(shot_map_away['made']['x'], shot_map_away['made']['y'],
-                   color='black', marker='x', label='Made Shot', alpha=0.5)
+                    color='black', marker='x', label='Made Shot', alpha=0.5)
         ax.scatter(shot_map_away['missed']['x'], shot_map_away['missed']['y'],
-                   color='green', marker='o', label='Missed Shot', alpha=0.5)
+                    color='green', marker='o', label='Missed Shot', alpha=0.5)
 
         fig.suptitle(away_team + ' Shot Map')
     except Exception as e:
-        logging.error(f"Error displaying shot map: {e}")
+         logging.error(f"Error displaying shot map: {e}")
     return fig
 
 
@@ -106,6 +106,7 @@ def run_app(event_number):
     placeholder_shot_efficiency = st.empty()
     placeholder_match_odds = st.empty()
     placeholder_fact = st.empty()
+    placeholder_image = st.empty()
 
     global homeTeamName
     global awayTeamName
@@ -139,6 +140,7 @@ def run_app(event_number):
         placeholder_bum.empty()
         placeholder_fact.empty()
         placeholder_match_odds.empty()
+        placeholder_image.empty()
 
         if switch == -1:  # next needs to be initialized to a base value
             next = display_player_statistics(
@@ -168,7 +170,7 @@ def run_app(event_number):
             # draymond
             stat_title.title("Draymond/Foul")
             placeholder_draymond.title(next)
-            st.image('./images/peter.png')
+            placeholder_image.image('./images/peter.png')
             next = display_hot_hands(
                 match_id)
             time.sleep(2)
