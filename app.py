@@ -20,20 +20,20 @@ def display_shot_map(match_id, home_team_id, away_team_id, fig, ax):
         shot_map_away = shot_map(match_id, away_team_id)
 
         ax.scatter(shot_map_home['made']['x'], shot_map_home['made']['y'],
-                   color='black', marker='x', label='Made Shot', alpha=0.5)
+                    color='black', marker='x', label='Made Shot', alpha=0.5)
         ax.scatter(shot_map_home['missed']['x'], shot_map_home['missed']['y'],
-                   color='green', marker='o', label='Missed Shot', alpha=0.5)
+                    color='green', marker='o', label='Missed Shot', alpha=0.5)
 
         fig.suptitle(homeTeamName + ' Shot Map')
 
         ax.scatter(shot_map_away['made']['x'], shot_map_away['made']['y'],
-                   color='black', marker='x', label='Made Shot', alpha=0.5)
+                    color='black', marker='x', label='Made Shot', alpha=0.5)
         ax.scatter(shot_map_away['missed']['x'], shot_map_away['missed']['y'],
-                   color='green', marker='o', label='Missed Shot', alpha=0.5)
+                    color='green', marker='o', label='Missed Shot', alpha=0.5)
 
         fig.suptitle(awayTeamName + ' Shot Map')
     except Exception as e:
-        logging.error(f"Error displaying shot map: {e}")
+         logging.error(f"Error displaying shot map: {e}")
     return fig
 
 def display_player_statistics(match_id):
@@ -91,7 +91,7 @@ def run_app(event_number):
     placeholder_match_odds = st.empty()
     placeholder_fact = st.empty()
     placeholder_image = st.empty()  # Placeholder for the image
-
+    
     global homeTeamName
     global awayTeamName
 
@@ -154,8 +154,9 @@ def run_app(event_number):
             switch += 1
             stat_title.title("Draymond/Foul")
             placeholder_draymond.title(next)
-            placeholder_image.image('./images/peter.png')  # Display the image
-            next = display_hot_hands(match_id)
+            placeholder_image.image('./images/peter.png')
+            next = display_hot_hands(
+                match_id)
             time.sleep(2)
         elif switch == 3:
             switch += 1
