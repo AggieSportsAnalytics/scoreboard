@@ -5,9 +5,10 @@ import pandas as pd
 import time
 import logging
 from api import live_matches_data
+import matplotlib.image as mpimg
 
 # layout="wide"
-st.set_page_config(layout="wide")
+st.set_page_config()
 
 
 def display_shot_map(match_id, home_team_id, away_team_id, fig, ax):
@@ -36,6 +37,16 @@ def display_shot_map(match_id, home_team_id, away_team_id, fig, ax):
 def display_player_statistics(match_id):
     player_statistics = parsed_player_statistics(match_id)
     return [pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T]
+
+
+def display_image(image_path):
+    # Load and display an image using Matplotlib
+    img = mpimg.imread(image_path)
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.imshow(img)
+    ax.axis('off')  # Hide the axes
+    fig.suptitle("Shot Chart", fontsize=16)
+    return fig
 
 
 fact_match = parse_live_match(0)
@@ -156,45 +167,45 @@ def run_app(event_number):
         elif switch == 1:  # Draymond/Foul
             stat_title.image(image_map[switch])
             placeholder_draymond.markdown(
-                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
             placeholder_draymond_2.markdown(
-                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_hot_hands(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 2:  # Hot Hands
             stat_title.image(image_map[switch])
             placeholder_hot_hands.markdown(
-                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
             placeholder_hot_hands_2.markdown(
-                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_bum(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 3:  # Bum
             stat_title.image(image_map[switch])
             placeholder_bum.markdown(
-                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
             placeholder_bum_2.markdown(
-                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_shot_efficiency(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 4:  # Shot Efficiency
             stat_title.image(image_map[switch])
             placeholder_shot_efficiency.markdown(
-                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
             placeholder_shot_efficiency_2.markdown(
-                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = display_match_odds(match_id)
             time.sleep(2)
             switch += 1
         elif switch == 5:  # Match Odds
             stat_title.image(image_map[switch])
             placeholder_match_odds.markdown(
-                f"<div style='text-align: center;'><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[0]}</h1></div>", unsafe_allow_html=True)
             placeholder_match_odds_2.markdown(
-                f"<div style='text-align: center;'><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
+                f"<div><h1>{next[1]}</h1></div>", unsafe_allow_html=True)
             next = fact
             time.sleep(2)
             switch += 1
