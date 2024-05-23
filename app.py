@@ -91,7 +91,7 @@ def run_app(event_number):
     placeholder_away_player_statistics = st.empty()
     placeholder_shot_map = st.empty()
     court_img = plt.imread('./images/shot_chart.webp')
-    fig, ax = plt.subplots(figsize=(3, 3))
+    fig, ax = plt.subplots(figsize=(3, 2))
     ax.imshow(court_img, extent=[-250, 250, -47.5, 422.5])
     ax.axis('off')
 
