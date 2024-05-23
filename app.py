@@ -10,6 +10,11 @@ import matplotlib.image as mpimg
 # layout="wide"
 st.set_page_config()
 
+# Initialize session state variables
+if 'displaying_stats' not in st.session_state:
+    st.session_state.displaying_stats = False
+if 'selected_event' not in st.session_state:
+    st.session_state.selected_event = None
 
 def display_shot_map(match_id, home_team_id, away_team_id, fig, ax):
     try:
@@ -38,7 +43,6 @@ def display_player_statistics(match_id):
     player_statistics = parsed_player_statistics(match_id)
     return [pd.DataFrame(player_statistics['home']).T, pd.DataFrame(player_statistics['away']).T]
 
-
 def display_image(image_path):
     # Load and display an image using Matplotlib
     img = mpimg.imread(image_path)
@@ -48,12 +52,10 @@ def display_image(image_path):
     fig.suptitle("Shot Chart", fontsize=16)
     return fig
 
-
 fact_match = parse_live_match(0)
 fact_match_id = fact_match.pop('id')
 homeTeamName = fact_match['home']
 awayTeamName = fact_match['away']
-
 
 def display_draymond(match_id):
     dray = draymond(match_id)
@@ -84,7 +86,6 @@ def display_match_odds(match_id):
     mo = match_odds(match_id)
     return f"{homeTeamName}: {str(round(mo[0], 2))}%", f"{awayTeamName}: {str(round(mo[1], 2))}%"
 
-
 def run_app(event_number):
     stat_title = st.empty()
     placeholder_home_player_statistics = st.empty()
@@ -94,7 +95,7 @@ def run_app(event_number):
     fig, ax = plt.subplots(figsize=(3, 2))
     ax.imshow(court_img, extent=[-250, 250, -47.5, 422.5])
     ax.axis('off')
-
+    
     switch = -1
     next = 0
 
@@ -129,8 +130,17 @@ def run_app(event_number):
         5: "./images/match_odds.png",
         6: "./images/fun_fact.png"
     }
+    
+    # Display the back button
+    if st.button("Back", key=f"back_button_{event_number}"):
+        st.session_state.displaying_stats = False
+        st.session_state.selected_event = None
+        st.experimental_rerun()
 
     for seconds in range(30):
+        if st.session_state.displaying_stats == False:
+            break
+
         match = parse_live_match(0)
         match_id = match.pop('id')
         home_team_id = match.pop('home_team_id')
@@ -217,8 +227,9 @@ def run_app(event_number):
             switch += 1
         elif switch == 7:
             switch = -1
-
-
+        
+        
+        
 data = live_matches_data()
 placeholders = []
 buttons = []
@@ -226,21 +237,25 @@ buttons = []
 if len(data['events']) == 0:
     st.title("No Games Currently")
 else:
-    for index, game in enumerate(data['events']):
-        home_team = game['homeTeam']['name']
-        away_team = game['awayTeam']['name']
-        emp = st.empty()
-        placeholders.append(emp)
-        game_name, game_score, game_start = emp.columns([6, 4, 1])
-        game_name.markdown(f"##### {home_team} vs. {away_team}")
-        game_score.markdown(
-            f"##### {game['homeScore']['current']} - {game['awayScore']['current']}")
-        game_start = game_start.empty()
-        buttons.append(game_start)
-        if game_start.button("Run", key=index):
-            for button in buttons:
-                button.empty()
-            for placeholder in placeholders:
-                placeholder.empty()
-            run_app(index)
-            break
+    if not st.session_state.displaying_stats:
+        for index, game in enumerate(data['events']):
+            home_team = game['homeTeam']['name']
+            away_team = game['awayTeam']['name']
+            emp = st.empty()
+            placeholders.append(emp)
+            game_name, game_score, game_start = emp.columns([6, 4, 1])
+            game_name.markdown(f"##### {home_team} vs. {away_team}")
+            game_score.markdown(f"##### {game['homeScore']['current']} - {game['awayScore']['current']}")
+            game_start = game_start.empty()
+            buttons.append(game_start)
+            if game_start.button("Run", key=f"run_button_{index}"):
+                st.session_state.displaying_stats = True
+                st.session_state.selected_event = index
+                for button in buttons:
+                    button.empty()
+                for placeholder in placeholders:
+                    placeholder.empty()
+                run_app(index)
+                break
+    else:
+        run_app(st.session_state.selected_event)

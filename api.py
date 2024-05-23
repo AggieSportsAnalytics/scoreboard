@@ -36,8 +36,8 @@ def shot_map_data(match_id, teamid):
                  "/team/" + str(teamid) + "/shotmap", headers=headers)
 
     res = conn.getresponse()
-    # print(res.read())
     data = json.loads(res.read().decode("utf-8"))
+    #data = json.loads(res.read().decode())
     return data
 
 
