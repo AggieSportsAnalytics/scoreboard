@@ -206,7 +206,7 @@ def controversial_fact(match_id):
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant who knows a lot about basketball."},
-            {"role": "user", "content": f"Give me a controversial fun fact about either the {home_team} or {away_team}. Make it around 50 words long, edgy and funny, and from recent events."},
+            {"role": "user", "content": f"Give me a controversial fun fact about either the {home_team} or {away_team}. Make it 20 words long, edgy and funny, and from recent events."},
         ]
     )
 

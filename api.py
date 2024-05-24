@@ -13,6 +13,7 @@ headers = {
     'X-RapidAPI-Host': "basketapi1.p.rapidapi.com"
 }
 
+
 def live_matches_data():
     conn.request("GET", "/api/basketball/matches/live", headers=headers)
 
@@ -20,29 +21,38 @@ def live_matches_data():
     data = json.loads(res.read().decode())
     return data
 
+
 def player_statistics_data(match_id):
-    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/lineups", headers=headers)
+    conn.request("GET", "/api/basketball/match/" +
+                 str(match_id) + "/lineups", headers=headers)
 
     res = conn.getresponse()
     data = json.loads(res.read().decode())
     return data
+
 
 def shot_map_data(match_id, teamid):
-    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/team/" + str(teamid) + "/shotmap", headers=headers)
+    conn.request("GET", "/api/basketball/match/" + str(match_id) +
+                 "/team/" + str(teamid) + "/shotmap", headers=headers)
 
     res = conn.getresponse()
-    data = json.loads(res.read().decode())
+    data = json.loads(res.read().decode("utf-8"))
+    #data = json.loads(res.read().decode())
     return data
+
 
 def match_odds_data(match_id):
-    conn.request("GET", "/api/basketball/match/" + str(match_id) + "/odds", headers=headers)
+    conn.request("GET", "/api/basketball/match/" +
+                 str(match_id) + "/odds", headers=headers)
 
     res = conn.getresponse()
     data = json.loads(res.read().decode())
     return data
 
+
 def match_data(match_id):
-    conn.request("GET", "/api/basketball/match/" + str(match_id), headers=headers)
+    conn.request("GET", "/api/basketball/match/" +
+                 str(match_id), headers=headers)
 
     res = conn.getresponse()
     data = json.loads(res.read().decode())
@@ -63,4 +73,3 @@ def match_data(match_id):
 # else:
 #     print("No Games Currently")
 # print(data)
-
