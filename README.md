@@ -1,4 +1,4 @@
-**Team Scoreboard 🏀**
+### 🏁 A Personal Scoreboard with Custom Statsitics for Basketball Games
 
 Our product combines hardware and software to provide the ultimate basketball experience.
 
