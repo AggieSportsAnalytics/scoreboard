@@ -1,5 +1,3 @@
 ### 🏁 A Personal Scoreboard with Custom Statsitics for Basketball Games
 
-Our product combines hardware and software to provide the ultimate basketball experience.
-
-Contributors: Vishal Shenoy, Ben Busche, Alex Qi, Manish Rathor, Abdullah Al Rawi 👨‍💻🔨
+The <b>Adaptive Scoreboard Appliance (ASA)</b> combines hardware and software to provide the ultimate basketball viewing experience. The ASA utilizes a Raspberry Pi and Streamlit interface to provide real-time, custom statsitics to basketball fans. Other features include a dual-screen setup with retro LED display and 3-D printed enclosure.
