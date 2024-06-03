@@ -4,7 +4,7 @@ The <b>Adaptive Scoreboard Appliance (ASA)</b> combines hardware and software to
 <br></br>
 The ASA brings basketball fans together, allowing them to connect with the game at a deeper level than possible before. It features games from all leages, all levels, and all countries. Ultimately, the ASA is the <i>first smart home device for the diehard sports fan</i>.
 <br></br>
-During this project, we took a heavily product-based approach during development. Accordingly, we made a commercial for the ASA, which you can watch <b><a href="https://youtu.be/1Y4P4fZu2cw" target="_blank">here 🎥</a>!</b>
+During the development of this project, our goal was to have a heavy focus on product. Accordingly, we made a commercial for the ASA, which you can watch <b><a href="https://youtu.be/1Y4P4fZu2cw" target="_blank">here 🎥</a>!</b>
 <br></br>
 
 # 🔑 Key Features
