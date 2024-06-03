@@ -34,74 +34,51 @@ To obtain Basketball data, we use a maintained API endpoint from <a href="https:
 We use a variety of Python libraries, such as Pandas and MatPlotLib, to craft the statsitics. Below is a snippet of the code used to calculate match shot efficiency.
 
 ```py
-def shot_efficiency(match_id):
-    try:
-        unparsed_data = player_statistics_data(match_id)
-        home_players = unparsed_data['home'].get('players', [])
-        away_players = unparsed_data['away'].get('players', [])
+unparsed_data = player_statistics_data(match_id)
+home_players = unparsed_data['home'].get('players', [])
+away_players = unparsed_data['away'].get('players', [])
 
-        def get_team_efficiency(players):
-            total_field_goals_made = sum(
-                p['statistics'].get('fieldGoalsMade', 0) for p in players)
-            total_field_goal_attempts = sum(
-                p['statistics'].get('fieldGoalAttempts', 0) for p in players)
-            total_free_throws_made = sum(
-                p['statistics'].get('freeThrowsMade', 0) for p in players)
-            total_free_throw_attempts = sum(
-                p['statistics'].get('freeThrowAttempts', 0) for p in players)
-
-            total_shots_made = total_field_goals_made + total_free_throws_made
-            total_shots_attempted = total_field_goal_attempts + total_free_throw_attempts
-
-            shooting_efficiency = (
-                total_shots_made / total_shots_attempted) * 100 if total_shots_attempted > 0 else 0
-            return shooting_efficiency
-
-        home_shooting_efficiency = get_team_efficiency(home_players)
-        away_shooting_efficiency = get_team_efficiency(away_players)
-
-        return home_shooting_efficiency, away_shooting_efficiency
+    def get_team_efficiency(players):
+        total_field_goals_made = sum(
+            p['statistics'].get('fieldGoalsMade', 0) for p in players)
+        total_field_goal_attempts = sum(
+            p['statistics'].get('fieldGoalAttempts', 0) for p in players)
+        total_free_throws_made = sum(
+            p['statistics'].get('freeThrowsMade', 0) for p in players)
+        total_free_throw_attempts = sum(
+            p['statistics'].get('freeThrowAttempts', 0) for p in players)
 ...
 ```
 
 Below is another snippet of code used to create a visualization for the player shotmap.
 
 ```py
-def shot_map(match_id, team_id):
-    try:
-        unparsed_data = shot_map_data(match_id, team_id)
-        x_made = []
-        y_made = []
-        x_missed = []
-        y_missed = []
-        for x in unparsed_data.get('shotmap', []):
-            if x.get('made') == True:
-                x_made.append(x.get('x'))
-                y_made.append(x.get('y'))
-            else:
-                x_missed.append(x.get('x'))
-                y_missed.append(x.get('y'))
+unparsed_data = shot_map_data(match_id, team_id)
+x_made = []
+y_made = []
+x_missed = []
+y_missed = []
+for x in unparsed_data.get('shotmap', []):
+    if x.get('made') == True:
+        x_made.append(x.get('x'))
+        y_made.append(x.get('y'))
+    else:
+        x_missed.append(x.get('x'))
+        y_missed.append(x.get('y'))
 
-        return {
-            'made': {'x': x_made, 'y': y_made},
-            'missed': {'x': x_missed, 'y': y_missed}
-        }
-    except (KeyError, ValueError) as e:
-        logging.error(f"Failed to get shot map data: {e}")
-        return {
-            'made': {'x': [], 'y': []},
-            'missed': {'x': [], 'y': []}
-        }
+return {
+    'made': {'x': x_made, 'y': y_made},
+    'missed': {'x': x_missed, 'y': y_missed}
+}
 ```
 
 Ultimately, all seven statsitics were implemented using data from the real-time API endpoint. The frontend of the project was crafted in Streamlit, a Python framework for frontend development.
 
 ```py
-def run_app(event_number):
-    stat_title = st.empty()
-    placeholder_home_player_statistics = st.empty()
-    placeholder_away_player_statistics = st.empty()
-    placeholder_shot_map = st.empty()
+stat_title = st.empty()
+placeholder_home_player_statistics = st.empty()
+placeholder_away_player_statistics = st.empty()
+placeholder_shot_map = st.empty()
 ...
 ```
 
@@ -122,9 +99,13 @@ while True:
     time.sleep(.5)
 ```
 
+After loading this code on the Raspberry Pi and wiring the components properly, development and costruction on the ASA was completed.
+
 # 🪴 Areas of Improvement
 
-- Data:
+- Frontend Design: The frontend design for the scoreboard is adequate, but given more time, we would have liked to make the design match the general brand guidelines of our marketing.
+- Polishing Details: The box enclosure is missing a back panel, which exposes the Raspberry Pi and wiring from behind. In the future, we plan to 3D print a back panel to create a sealed enclosure.
+- Matrix LED Screen: Unfortunetly, the Matrix LED screen we received is a defective unit. This causes the screen pixels to glitch out and look subpar.
 
 # 🚀 Further Uses
 
