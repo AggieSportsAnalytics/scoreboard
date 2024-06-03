@@ -99,7 +99,7 @@ while True:
     time.sleep(.5)
 ```
 
-After loading this code on the Raspberry Pi and wiring the components properly, development and costruction on the ASA was completed.
+After setting up this code on the Raspberry Pi and wiring the hardware components properly, development on the ASA was completed.
 
 # 🪴 Areas of Improvement
 
@@ -110,13 +110,14 @@ After loading this code on the Raspberry Pi and wiring the components properly, 
 # 🚀 Further Uses
 
 - The project can be implemented to support all sports, including baseball, soccer, hockey, cricket, and more.
-- The ASA could be adapted to support features on other home devices, such as voice controls and audio.
+- The ASA could be adapted to support features on conventional home devices, such as voice controls and audio.
 
 # 💻 Technology
 
 - Raspberry Pi
-- Potentiometer and Push Button
+- Potentiometer
+- Push Button
 - Streamlit
 - Pandas
 - MatPlotLib
-- GPT-4
+- GPT-4o
