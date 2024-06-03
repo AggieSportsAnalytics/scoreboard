@@ -4,26 +4,26 @@ The <b>Adaptive Scoreboard Appliance (ASA)</b> combines hardware and software to
 <br></br>
 The ASA brings basketball fans together, allowing them to connect with the game at a deeper level than possible before. It features games from all leages, all levels, and all countries. Ultimately, the ASA is the first smart home device for the diehard sports fan.
 <br></br>
-<b>We made a mock commercial for the ASA, which you can watch <a href="https://www.youtube.com/watch?v=c6inhEnC4-I" target="_blank">here</a>!</b>
+<b>We made a commercial for the ASA, which you can watch <a href="https://youtu.be/1Y4P4fZu2cw" target="_blank">here</a>!</b>
 <br></br>
 
 # 🔑 Key Features
 
-## Large Language Model (LLM) Integration
+## Seven Proprietary Statistics
 
-HIKE utilizes LLMs through Retrieval Augmented Generation (RAG) for natural language chatting and conducting sentiment analysis on sports news and injury data.
-<br></br>
-<img width="990" alt="image" src="https://github.com/AggieSportsAnalytics/FantasyChatbot/blob/45c3f1d46ab61f51957e33a64bff22cf9f19024b/images/rag.png">
-
-## Time Series Analysis
-
-HIKE implements time series analysis to analyze data over the sports season. This allows HIKE algorithm to understand data at specific times during the football and basketball seasons.
+The ASA implements seven custom-made statistics to analyze the game at a granular level. These include the Player Shotmap, Hot Hands, Bum, Fun Fact, Match Odds, Foul, and Shot Efficiency metrics. All of these statistics are calculated through unique algorithms and large language models (LLMs). Advanced data visualization was utilized for the Player Shotmap, which shows made/missed shots on a map of the court.
 <br></br>
 <img width="990" alt="image" src="https://github.com/AggieSportsAnalytics/FantasyChatbot/blob/45c3f1d46ab61f51957e33a64bff22cf9f19024b/images/timeseriesanalysis.png">
 
-## Streamlit Frontend
+## Raspberry Pi and Hardware Integrations
 
-The frontend is built using Streamlit, allowing for easy modification and rapid performance. This choice eliminates the need for conventional request-response cycles between a frontend and backend, significantly reducing latency.
+The ASA is powered by a Raspberry Pi, which is a single-board computer. A button and potentiometer (dial/knob) were wired to the Raspberry Pi to provide hardware controls. These hardware components are housed in a custom 3D printed enclosure made of sustainable PLA filament. It was printed at the UC Davis Engineering Student Design Center.
+<br></br>
+<img width="990" alt="image" src="https://github.com/AggieSportsAnalytics/FantasyChatbot/blob/45c3f1d46ab61f51957e33a64bff22cf9f19024b/images/rag.png">
+
+## Dual Screen Display
+
+The ASA has a dual screen display, with the upper screen being a special Matrix LED. This display gives the ASA a retro look and emphasizes the product-based approach we took with this project.
 <br></br>
 <img width="990" alt="image" src="https://github.com/AggieSportsAnalytics/FantasyChatbot/blob/45c3f1d46ab61f51957e33a64bff22cf9f19024b/images/streamlit.png">
 
@@ -155,12 +155,9 @@ st.markdown(
 
 # 💻 Technology
 
-- LangChain
-- GPT-4
-- Statsmodels
-- Pandas
+- Raspberry Pi
+- Potentiometer and Push Button
 - Streamlit
-
-# 🏆 Recognition
-
-<b>First Place</b> in the 2024 Winter Quarter <a href="https://raw.githubusercontent.com/AggieSportsAnalytics/FantasyChatbot/main/images/casecomp.png" target="_blank">ASA Case Competition</a>.
+- Pandas
+- MatPlotLib
+- GPT-4
